@@ -6,7 +6,7 @@
 /*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/14 17:18:29 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/14 18:18:58 by inbennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,39 @@
 
 # include "../libft/get_next_line.h"
 # include "../libft/libft.h"
+# include "../mlx/mlx.h"
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+
+# define W 119
+# define A 97
+# define S 115
+# define D 100
+# define UP 65362
+# define LEFT 65361
+# define DOWN 65364
+# define RIGHT 65363
+# define ESCAPE 65307
+# define ONE_UNIT 64
+
+typedef struct s_window_mlx
+{
+	void	*mlx_ptr;
+	void	*win_ptr;
+	int		width;
+	int		height;
+}			t_window_mlx;
+
+typedef struct s_mlx_img
+{
+	void	*img_ptr;
+	char	*img_addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
+}			t_mlx_img;
 
 typedef struct s_cub
 {
@@ -29,6 +58,28 @@ typedef struct s_cub
 	int		c_color;
 	int		f_color;
 }			t_cub;
+
+// Map checking
+int			check_sides_space(char **map, int i, int j);
+int			is_map_char(char c);
+int			is_player_direction(char c);
+int			is_allowed_char(char c);
+int			ft_is_space(char c);
+
+// Minilibx display functions
+int			start_mlx(int height, int width, char **map);
+
+// Handle keyboard inputs
+int			handle_keyboard_inputs(int key, void *param);
+
+// Free functions
+int			quit_cube(void *param);
+int			error_exit(char *str);
+
+// Map utils
+void		free_arr_until_idx(char **arr, int idx);
+int			get_arr_size(char **arr);
+int			error_exit(char *str);
 
 // parsing
 void		name_check(char *str);

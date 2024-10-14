@@ -7,7 +7,11 @@ NAME = cub3d
 # NAME_BONUS = cub3d_bonus
 
 SRC = src/parsing.c src/errors.c src/utils.c src/utils2.c src/init.c \
-	src/add_text.c src/main.c src/get_color.c
+	src/add_text.c src/main.c src/get_color.c src/test_characters.c \
+	src/map_checking.c \
+	src/mlx.c \
+	src/handle_keyboard_inputs.c \
+	src/map_utils.c
 # SRC_BONUS =
 
 OBJS_BASE = $(SRC:.c=.o)
@@ -29,12 +33,12 @@ $(NAME) : $(OBJS)
 # 	$(CC) $(CFLAGS) -I $(INCLUDE) $(MLX) -o $(NAME_BONUS) $(OBJS_BONUS) $(LIB)
 
 $(OBJ_PATH)%.o: %.c
-	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@ 
+	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(OBJ_PATH):
 	mkdir -p obj/
-	mkdir -p obj/source/
-#	mkdir -p obj/source_bonus/
+	mkdir -p obj/src/
+#	mkdir -p obj/src_bonus/
 
 clean:
 	make fclean -C libft/
