@@ -3,3 +3,4 @@
 --> error handling en cas de failed allocation
 --> suggestion sur add_north etc
 --> map needs to be 9*9 minimum
+--> \n at the end of the file makes throws an error
