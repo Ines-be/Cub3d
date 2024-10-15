@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:29:44 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/14 15:56:41 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/15 17:07:04 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	free_cub(t_cub *cub)
 	ft_free(cub->so_text);
 	ft_free(cub->no_text);
 	ft_free(cub->we_text);
+	if (cub->map)
+		free_tab(cub->map);
 }
 
 bool	is_space(char c)

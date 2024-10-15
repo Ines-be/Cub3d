@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/14 18:18:58 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/15 16:47:23 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,12 @@ typedef struct s_cub
 	char	*we_text;
 	int		c_color;
 	int		f_color;
+	char	**map;
 }			t_cub;
 
 // Map checking
+char		**get_map(t_list **file);
+int			check_map(t_cub *cub);
 int			check_sides_space(char **map, int i, int j);
 int			is_map_char(char c);
 int			is_player_direction(char c);
@@ -75,25 +78,23 @@ int			handle_keyboard_inputs(int key, void *param);
 // Free functions
 int			quit_cube(void *param);
 int			error_exit(char *str);
+void		exit_map_not_valid(t_cub *cub, int err);
 
 // Map utils
 void		free_arr_until_idx(char **arr, int idx);
 int			get_arr_size(char **arr);
-int			error_exit(char *str);
 
 // parsing
 void		name_check(char *str);
 t_list		*get_file(int fd);
 void		elems_check(char **split_elem, t_list *start, t_cub *cub);
-bool		get_elems(t_list *file_content, t_cub *cub, t_list *start);
-void		parsing(int ac, char **av, t_list **start, t_cub *cub);
+void		parsing(int ac, char **av, t_cub *cub);
 
 // init
 void		init_cub(t_cub *cub);
 
 // add text
-void		add_texture(char **split_elem, t_list *file_content, t_list *start,
-				t_cub *cub);
+void		add_texture(char **split_elem, t_list *file_content, t_cub *cub);
 int			add_north(char **tab, t_list *start, t_cub *cub);
 int			add_south(char **tab, t_list *start, t_cub *cub);
 int			add_east(char **tab, t_list *start, t_cub *cub);

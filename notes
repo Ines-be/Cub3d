@@ -1,0 +1,5 @@
+--> unprotected mallocs :   get_color.C (ft_strtrim)
+                            add_text.c (ft_split)
+--> error handling en cas de failed allocation
+--> suggestion sur add_north etc
+--> map needs to be 9*9 minimum

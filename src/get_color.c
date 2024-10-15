@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_color.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:12:59 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/14 18:22:01 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/15 12:13:58 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	get_int(char **split_elem, t_list *start, t_cub *cub, char *color)
 	int		ret;
 
 	temp = NULL;
-	temp = ft_strtrim(color, "\n");
+	temp = ft_strtrim(color, "\n"); // not protected
 	ret = pos_atoi(temp);
 	if (ret < 0)
 	{
@@ -46,7 +46,7 @@ void	get_color(char **tab, t_list *start, t_cub *cub, char id)
 		texture_error(tab, start, cub, "Format error. exemple: C 225, 30, 0");
 	while (tab[++i])
 	{
-		color = ft_strtrim(tab[i], ",");
+		color = ft_strtrim(tab[i], ","); // not protected
 		if (i == 1)
 			red = get_int(tab, start, cub, color);
 		if (i == 2)
