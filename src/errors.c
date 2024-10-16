@@ -6,7 +6,7 @@
 /*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:30:14 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/14 16:05:01 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:33:45 by inbennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,11 @@ void	texture_error(char **tab, t_list *start, t_cub *cub, char *msg)
 		free_tab(tab);
 	free_cub(cub);
 	map_error(-1, msg, start);
+}
+
+void	color_error(char **tab, t_list *start, t_cub *cub, char *color)
+{
+	ft_free(color);
+	texture_error(tab, start, cub,
+		"Format error. exemple: C 225,30,0");
 }

@@ -6,7 +6,7 @@
 /*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/14 18:18:58 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:34:44 by inbennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int			pos_atoi(char *str);
 // errors
 void		map_error(int fd, char *msg, t_list *file_content);
 void		texture_error(char **tab, t_list *start, t_cub *cub, char *msg);
+void		color_error(char **tab, t_list *start, t_cub *cub, char *color);
 
 // ft_split
 char		**ft_split(const char *s, char c);
