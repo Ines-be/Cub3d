@@ -6,7 +6,7 @@
 /*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:58:06 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/14 17:08:15 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/16 19:02:23 by inbennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,17 @@ int	pos_atoi(char *str)
 	if (result >= 2147483647)
 		return (-1);
 	return (result);
+}
+
+void	skip_elements(t_list **file_content)
+{
+	int	i;
+
+	i = 0;
+	while (file_content && i < 6)
+	{
+		if (!is_empty((*file_content)->content))
+			i++;
+		*file_content = (*file_content)->next;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/16 18:34:44 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/16 19:02:30 by inbennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ bool		is_number(char c);
 bool		only_numbers(char *str);
 int			create_rgb(int r, int g, int b);
 int			pos_atoi(char *str);
+void		skip_elements(t_list **file_content);
 
 // errors
 void		map_error(int fd, char *msg, t_list *file_content);
