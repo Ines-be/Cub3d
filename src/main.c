@@ -6,7 +6,7 @@
 /*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:34:53 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/16 19:02:19 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/16 19:03:38 by inbennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ int	main(int ac, char **av)
 
 	parsing(ac, av, &start, &cub);
 	file = start;
-	skip_elements(&start);
-	printf("%s\n", start->content);
-	free_list(file); // a la fin du parsing
+	skip_elements(&file);
+	// utiliser file pour le parsing de la map
+	// pour que start soit utilise pour free_list
+	free_list(start); // a la fin du parsing
 	free_cub(&cub); // a la fin du prog
 }
