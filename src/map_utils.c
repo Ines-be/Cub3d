@@ -1,16 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:04:59 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/10/14 18:10:08 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/17 17:46:30 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+void	skip_elements(t_list **file_content)
+{
+	int	i;
+
+	i = 0;
+	while (file_content && i < 6)
+	{
+		if (!is_empty((*file_content)->content))
+			i++;
+		*file_content = (*file_content)->next;
+	}
+}
 
 int	error_exit(char *str)
 {

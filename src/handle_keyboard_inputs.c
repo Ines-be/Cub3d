@@ -3,90 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keyboard_inputs.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/10/14 18:11:07 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:30:56 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int move_character_up(void *param)
-{ 
-    (void) param;
-    printf("moving character up\n");
-    return (0);
-}
-
-int move_character_down(void *param)
+int move_direction_left(t_cub *cub)
 {
-    (void) param;
-    printf("moving character down\n");
-    return (0);
-}
-
-int move_character_left(void *param)
-{
-    (void) param;
-    printf("moving character left\n");
-    return (0);
-}
-
-int move_character_right(void *param)
-{
-    (void) param;
-    printf("moving character right\n");
-    return (0);
-}
-
-int move_direction_left(void *param)
-{
-    (void) param;
+    (void) cub;
     printf("moving direction left\n");
     return (0);
 }
 
-int move_direction_right(void *param)
+int move_direction_right(t_cub *cub)
 {
-    (void) param;
+    (void) cub;
     printf("moving direction right\n");
     return (0);
 }
 
-int move_direction(int key, void *param)
+int move_direction(int key, t_cub *cub)
 {
     if (key == LEFT)
-        return (move_direction_left(param));
+        return (move_direction_left(cub));
     else if (key == RIGHT)
-        return (move_direction_right(param));
+        return (move_direction_right(cub));
     return (0);
 }
 
-int move_character(int key, void *param)
+int move_character(int key, t_cub *cub)
 {
-    (void) param;
     if (key == W)
-        return (move_character_up(param));
+        return (move_character_up(cub));
     else if (key == S)
-        return (move_character_down(param));
+        return (move_character_down(cub));
     else if (key == A)
-        return (move_character_left(param));
+        return (move_character_left(cub));
     else if (key == D)
-        return (move_character_right(param));
+        return (move_character_right(cub));
     return (0);
 }
 
-int handle_keyboard_inputs(int key, void *param)
+int handle_keyboard_inputs(int key, t_cub *cub)
 {
-    (void) param;
-    printf("key == %d\n", key);
     if (key == LEFT || key == RIGHT)
-        return (move_direction(key, param));
+        return (move_direction(key, cub));
     else if (key == W || key == A || key == S || key == D)
-        return (move_character(key, param));
+        return (move_character(key, cub));
     else if (key == ESCAPE)
-        return (quit_cube(param));
-    printf("key = %d\n", key);
+        return (quit_cube(cub));
     return (0);
 }

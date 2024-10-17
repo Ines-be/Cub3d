@@ -3,149 +3,121 @@
 /*                                                        :::      ::::::::   */
 /*   mlx.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/10/14 18:19:09 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/17 17:27:52 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int	quit_cube(void *param)
+int	quit_cube(t_cub *cub)
 {
-	(void)param;
+	(void)cub;
 	printf("quitting\n");
 	exit(0);
 	return (0);
 }
 
-t_mlx_img	*init_img(t_window_mlx *data)
-{
-	t_mlx_img	*img;
-
-	img = malloc(sizeof(t_mlx_img));
-	if (!img)
-		return (error_exit(NULL), NULL);
-	img->img_ptr = mlx_new_image(data->mlx_ptr, data->width, data->height);
-	if (!img->img_ptr)
-		return (NULL);
-	img->img_addr = mlx_get_data_addr(img->img_ptr, &img->bpp, &img->line_len,
-			&img->endian);
-	return (img);
-}
-
-void	img_pix_put(t_mlx_img *img, int x, int y, int color)
-{
-	char	*pixel;
-
-	pixel = img->img_addr + (y * img->line_len + x * (img->bpp / 8));
-	*(int *)pixel = color;
-}
-
-int	draw_x_line(t_mlx_img *img, int x_pos, int y_pos, int color)
-{
-	int	x_max;
-
-	x_max = x_pos + ONE_UNIT;
-	while (x_pos < x_max)
-	{
-		img_pix_put(img, x_pos, y_pos, color);
-		x_pos++;
-	}
-	return (0);
-}
-
-int fill_x_line(t_mlx_img *img, int x_pos, int y_pos, int color)
-{
-    int x_max;
-
-    x_max = x_pos + ONE_UNIT;
-    while (++x_pos < x_max)
-        img_pix_put(img, x_pos, y_pos, color);
-    return (0);
-}
-
-int	draw_y_line(t_mlx_img *img, int x_pos, int y_pos_init, char terrain)
-{
-	int	y_pos;
-	int	y_max;
-
-    (void) terrain;     
-	y_pos = y_pos_init;
-	y_max = y_pos + ONE_UNIT;
-	while (y_pos < y_max)
-	{
-		img_pix_put(img, x_pos, y_pos, 0x808080);
-        if (terrain == '1')
-            draw_x_line(img, x_pos + 1, y_pos, 0xFFFFFF);
-		y_pos += 1;
-	}
-	return (0);
-}
-
-int	draw_map(t_mlx_img *img, char **map)
+void	find_player_init_pos(t_cub *cub)
 {
 	int	i;
 	int	j;
-	int	px_x_pos;
-	int	px_y_pos;
 
 	i = -1;
-	px_y_pos = 10;
-	while (map[++i])
+	while (cub->map[++i])
 	{
 		j = -1;
-		px_x_pos = 10;
-		while (map[i][++j])
+		while (cub->map[i][++j])
 		{
-			if (!ft_is_space(map[i][j]))
+			if (is_player_direction(cub->map[i][j]))
 			{
-				draw_y_line(img, px_x_pos, px_y_pos, map[i][j]);
-				draw_x_line(img, px_x_pos, px_y_pos, 0x808080);
-                px_x_pos += ONE_UNIT;
+				cub->player_pos.x = j;
+				cub->player_pos.y = i;
+				printf("i = %d\n", i);
+				printf("j = %d\n", j);
+				return ;
 			}
 		}
-		draw_y_line(img, px_x_pos, px_y_pos, map[i][j]);
-		px_y_pos += ONE_UNIT;
 	}
-	i = 0;
-	px_x_pos = 10;
-	while (i < (int)ft_strlen(map[get_arr_size(map) - 1]))
-    {
-		draw_x_line(img, px_x_pos, px_y_pos, 0x808080);
-        px_x_pos += ONE_UNIT;
-        i++;
-    }
+}
+
+void	draw_player(t_mlx_img *img, t_cub *cub)
+{
+	int	i;
+
+	i = 1;
+	while (i <= 4)
+	{
+		img_pix_put(img, cub->player_pos.x, cub->player_pos.y - i, 0xFF0000);
+		i++;
+	}
+	i = 1;
+	while (i <= 2)
+	{
+		img_pix_put(img, cub->player_pos.x - i, cub->player_pos.y, 0xFF0000);
+		i++;
+	}
+	i = 1;
+	while (i <= 2)
+	{
+		img_pix_put(img, cub->player_pos.x + i, cub->player_pos.y, 0xFF0000);
+		i++;
+	}
+}
+
+int	init_player(t_mlx_img *img, t_cub *cub)
+{
+	cub->player_pos.x = (ONE_UNIT * cub->player_pos.x) + (ONE_UNIT / 2) + 10;
+	cub->player_pos.y = (ONE_UNIT * cub->player_pos.y) + (ONE_UNIT / 2) + 10;
+	printf("x = %f\n", cub->player_pos.x);
+	printf("y = %f\n", cub->player_pos.y);
+	draw_player(img, cub);
 	return (0);
 }
 
-int	start_raycasting(t_window_mlx *data, char **map)
+int	start_raycasting(t_window_mlx *data, t_cub *cub)
 {
 	t_mlx_img	*img;
 
 	img = init_img(data);
 	if (!img)
 		return (error_exit(NULL), -1);
-	draw_map(img, map);
+	find_player_init_pos(cub);
+	draw_map(img, cub->map);
+	init_player(img, cub);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, img->img_ptr, 0, 0);
 	return (0);
 }
 
-int	start_mlx(int height, int width, char **map)
+int	refresh_raycasting(t_window_mlx *data, t_cub *cub)
 {
-	t_window_mlx	data;
+	t_mlx_img	*img;
 
-	data.mlx_ptr = mlx_init();
-	data.width = width;
-	data.height = height;
-	if (!data.mlx_ptr)
+	img = init_img(&cub->mlx_data);
+	if (!img)
+		return (error_exit(NULL), -1);
+	draw_map(img, cub->map);
+	draw_player(img, cub);
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, img->img_ptr, 0, 0);
+    return (0);
+}
+
+int	start_mlx(int height, int width, t_cub *cub)
+{
+	cub->mlx_data.mlx_ptr = mlx_init();
+	cub->mlx_data.width = width;
+	cub->mlx_data.height = height;
+	if (!cub->mlx_data.mlx_ptr)
 		return (-1);
-	data.win_ptr = mlx_new_window(data.mlx_ptr, width, height, "cube3D");
-	if (!data.win_ptr)
+	cub->mlx_data.win_ptr = mlx_new_window(cub->mlx_data.mlx_ptr, width, height,
+			"cube3D");
+	if (!cub->mlx_data.win_ptr)
 		return (-1);
-	start_raycasting(&data, map);
-	mlx_key_hook(data.win_ptr, handle_keyboard_inputs, NULL);
-	mlx_loop(data.mlx_ptr);
+	start_raycasting(&cub->mlx_data, cub);
+	// mlx_key_hook(cub->mlx_data.win_ptr, handle_keyboard_inputs, cub);
+	mlx_hook(cub->mlx_data.win_ptr, 2, (1L << 0), handle_keyboard_inputs, cub);
+	mlx_loop(cub->mlx_data.mlx_ptr);
 	return (0);
 }

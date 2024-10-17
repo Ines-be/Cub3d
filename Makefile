@@ -10,8 +10,11 @@ SRC = src/parsing.c src/errors.c src/utils.c src/utils2.c src/init.c \
 	src/add_text.c src/main.c src/get_color.c src/test_characters.c \
 	src/map_checking.c \
 	src/mlx.c \
+	src/mlx_utils.c \
 	src/handle_keyboard_inputs.c \
-	src/map_utils.c
+	src/movement_inputs.c \
+	src/map_utils.c \
+	src/minimap.c
 # SRC_BONUS =
 
 OBJS_BASE = $(SRC:.c=.o)

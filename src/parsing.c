@@ -6,63 +6,13 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:13:50 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/15 17:13:19 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/10/17 12:19:46 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-// bool	get_elems(t_list **file_content, t_cub *cub, t_list *start)
-// {
-// 	int		i;
-// 	char	**split_elem;
-
-// 	i = 0;
-// 	split_elem = NULL;
-// 	while (file_content && i < 6)
-// 	{
-// 		if (is_empty(file_content->content))
-// 			file_content = file_content->next;
-// 		else
-// 		{
-// 			if (is_elem(file_content->content))
-// 				add_texture(split_elem, file_content, start, cub);
-// 			i++;
-// 			file_content = file_content->next;
-// 		}
-// 	}
-// 	elems_check(split_elem, start, cub);
-// 	return (true);
-// }
-
-bool	get_elems(t_list **file_content, t_cub *cub)
-{
-	int		i;
-	char	**split_elem;
-	t_list	*current;
-	t_list	*tmp;
-
-	i = 0;
-	split_elem = NULL;
-	current = *file_content;
-	while (current && i < 6)
-	{
-		if (is_elem(current->content))
-		{
-			add_texture(split_elem, current, cub);
-			i++;
-		}
-		tmp = current->next;
-		free(current->content);
-		free(current);
-		current = tmp;
-	}
-	*file_content = current;
-	elems_check(split_elem, *file_content, cub);
-	return (true);
-}
-
-void	parsing(int ac, char **av, t_cub *cub)
+void	parsing(int ac, char **av, t_list **start, t_cub *cub)
 {
 	int		fd;
 	t_list	*file_content;
@@ -74,15 +24,17 @@ void	parsing(int ac, char **av, t_cub *cub)
 	if (fd < 0) // perror ?
 		map_error(-1, "Can't open file.", NULL);
 	file_content = get_file(fd);
+    *start = file_content;
 	if (!file_content || ft_lstsize(file_content) < 8)
 		map_error(fd, "You should have 6 elements and 1 map in your file.",
 			file_content);
 	if (fd > 0)
 		close(fd);
 	init_cub(cub);
-	get_elems(&file_content, cub);
+	get_elems(file_content, cub, *start);
+    skip_elements(&file_content);
 	cub->map = get_map(&file_content);
-	free_list(file_content);
+	free_list(*start);
 	check_map(cub);
 }
 
@@ -140,4 +92,27 @@ void	elems_check(char **split_elem, t_list *start, t_cub *cub)
 		texture_error(split_elem, start, cub, "C color missing.");
 	if (cub->f_color < 0)
 		texture_error(split_elem, start, cub, "F color missing.");
+}
+
+bool	get_elems(t_list *file_content, t_cub *cub, t_list *start)
+{
+	int		i;
+	char	**split_elem;
+
+	i = 0;
+	split_elem = NULL;
+	while (file_content && i < 6)
+	{
+		if (is_empty(file_content->content))
+			file_content = file_content->next;
+		else
+		{
+			if (is_elem(file_content->content))
+				add_texture(split_elem, file_content, start, cub);
+			i++;
+			file_content = file_content->next;
+		}
+	}
+	elems_check(split_elem, start, cub);
+	return (true);
 }

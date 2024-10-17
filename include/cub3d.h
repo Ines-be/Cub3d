@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/15 16:47:23 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/10/17 17:33:31 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <math.h>
 
 # define W 119
 # define A 97
@@ -34,94 +35,124 @@
 
 typedef struct s_window_mlx
 {
-	void	*mlx_ptr;
-	void	*win_ptr;
-	int		width;
-	int		height;
-}			t_window_mlx;
+	void			*mlx_ptr;
+	void			*win_ptr;
+	int				width;
+	int				height;
+}					t_window_mlx;
 
 typedef struct s_mlx_img
 {
-	void	*img_ptr;
-	char	*img_addr;
-	int		bpp;
-	int		line_len;
-	int		endian;
-}			t_mlx_img;
+	void			*img_ptr;
+	char			*img_addr;
+	int				bpp;
+	int				line_len;
+	int				endian;
+}					t_mlx_img;
+
+typedef struct s_player_pos
+{
+	float			x;
+	float			y;
+    bool            keypress;
+}					t_player_pos;
 
 typedef struct s_cub
 {
-	char	*no_text;
-	char	*so_text;
-	char	*ea_text;
-	char	*we_text;
-	int		c_color;
-	int		f_color;
-	char	**map;
-}			t_cub;
+	char			*no_text;
+	char			*so_text;
+	char			*ea_text;
+	char			*we_text;
+	int				c_color;
+	int				f_color;
+	char			**map;
+	t_window_mlx	mlx_data;
+	t_player_pos	player_pos;
+}					t_cub;
 
 // Map checking
-char		**get_map(t_list **file);
-int			check_map(t_cub *cub);
-int			check_sides_space(char **map, int i, int j);
-int			is_map_char(char c);
-int			is_player_direction(char c);
-int			is_allowed_char(char c);
-int			ft_is_space(char c);
+char				**get_map(t_list **file);
+int					check_map(t_cub *cub);
+int					check_sides_space(char **map, int i, int j);
+int					is_map_char(char c);
+int					is_player_direction(char c);
+int					is_allowed_char(char c);
+int					ft_is_space(char c);
 
 // Minilibx display functions
-int			start_mlx(int height, int width, char **map);
+int					start_mlx(int height, int width, t_cub *cub);
+t_mlx_img			*init_img(t_window_mlx *data);
+void				img_pix_put(t_mlx_img *img, int x, int y, int color);
+
+// Raycasting
+int					start_raycasting(t_window_mlx *data, t_cub *cub);
+int					refresh_raycasting(t_window_mlx *data, t_cub *cub);
 
 // Handle keyboard inputs
-int			handle_keyboard_inputs(int key, void *param);
+int					handle_keyboard_inputs(int key, t_cub *cub);
+
+// Movement inputs
+int					move_character_up(t_cub *cub);
+int					move_character_down(t_cub *cub);
+int					move_character_left(t_cub *cub);
+int					move_character_right(t_cub *cub);
 
 // Free functions
-int			quit_cube(void *param);
-int			error_exit(char *str);
-void		exit_map_not_valid(t_cub *cub, int err);
+int					quit_cube(t_cub *cub);
+int					error_exit(char *str);
+void				exit_map_not_valid(t_cub *cub, int err);
+
+// Map
+int					draw_map(t_mlx_img *img, char **map);
 
 // Map utils
-void		free_arr_until_idx(char **arr, int idx);
-int			get_arr_size(char **arr);
+void				free_arr_until_idx(char **arr, int idx);
+int					get_arr_size(char **arr);
+void				skip_elements(t_list **file_content);
 
 // parsing
-void		name_check(char *str);
-t_list		*get_file(int fd);
-void		elems_check(char **split_elem, t_list *start, t_cub *cub);
-void		parsing(int ac, char **av, t_cub *cub);
+void				name_check(char *str);
+t_list				*get_file(int fd);
+void				elems_check(char **split_elem, t_list *start, t_cub *cub);
+bool				get_elems(t_list *file_content, t_cub *cub, t_list *start);
+void				parsing(int ac, char **av, t_list **start, t_cub *cub);
 
 // init
-void		init_cub(t_cub *cub);
+void				init_cub(t_cub *cub);
 
 // add text
-void		add_texture(char **split_elem, t_list *file_content, t_cub *cub);
-int			add_north(char **tab, t_list *start, t_cub *cub);
-int			add_south(char **tab, t_list *start, t_cub *cub);
-int			add_east(char **tab, t_list *start, t_cub *cub);
-int			add_west(char **tab, t_list *start, t_cub *cub);
+void				add_texture(char **split_elem, t_list *file_content,
+						t_list *start, t_cub *cub);
+int					add_north(char **tab, t_list *start, t_cub *cub);
+int					add_south(char **tab, t_list *start, t_cub *cub);
+int					add_east(char **tab, t_list *start, t_cub *cub);
+int					add_west(char **tab, t_list *start, t_cub *cub);
 
 // get color
-int			get_int(char **split_elem, t_list *start, t_cub *cub, char *color);
-void		get_color(char **split_elem, t_list *start, t_cub *cub, char id);
+int					get_int(char **split_elem, t_list *start, t_cub *cub,
+						char *color);
+void				get_color(char **split_elem, t_list *start, t_cub *cub,
+						char id);
 
 // utils
-bool		is_space(char c);
-void		free_line(char *line);
-void		free_cub(t_cub *cub);
-bool		is_empty(char *str);
-bool		is_elem(char *str);
+bool				is_space(char c);
+void				free_line(char *line);
+void				free_cub(t_cub *cub);
+bool				is_empty(char *str);
+bool				is_elem(char *str);
 
 // utils2
-bool		is_number(char c);
-bool		only_numbers(char *str);
-int			create_rgb(int r, int g, int b);
-int			pos_atoi(char *str);
+bool				is_number(char c);
+bool				only_numbers(char *str);
+int					create_rgb(int r, int g, int b);
+int					pos_atoi(char *str);
 
 // errors
-void		map_error(int fd, char *msg, t_list *file_content);
-void		texture_error(char **tab, t_list *start, t_cub *cub, char *msg);
+void				map_error(int fd, char *msg, t_list *file_content);
+void				texture_error(char **tab, t_list *start, t_cub *cub,
+						char *msg);
 
 // ft_split
-char		**ft_split(const char *s, char c);
+char				**ft_split(const char *s, char c);
 
 #endif
