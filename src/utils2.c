@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:58:06 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/17 17:57:45 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/10/17 17:58:51 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,3 @@ int	pos_atoi(char *str)
 	return (result);
 }
 
-void	skip_elements(t_list **file_content)
-{
-	int	i;
-
-	i = 0;
-	while (file_content && i < 6)
-	{
-		if (!is_empty((*file_content)->content))
-			i++;
-		*file_content = (*file_content)->next;
-	}
-}

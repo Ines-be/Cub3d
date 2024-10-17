@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:20:05 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/10/15 17:29:00 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/10/17 18:33:24 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	check_sides_null(char **map, int i, int j)
 {
 	if (!map[i][j - 1] || !map[i][j + 1])
 		return (1);
-	if (j > (int)ft_strlen(map[i - 1]) || j > (int)ft_strlen(map[i + 1]))
+	if (j > (int)ft_strlen(map[i - 1]) - 1 || j > (int)ft_strlen(map[i + 1]) - 1)
 		return (1);
 	return (0);
 }
@@ -67,12 +67,15 @@ int	is_border(char **map, int i, int j)
 {
 	if (is_map_char(map[i][j]))
 	{
+        if (i == 1 && j == 3)
+            printf("coucou char = %c\n", map[i][j]);
 		if (i == 0 || j == 0 || j == (int)ft_strlen(map[i]) - 1
 			|| i == get_arr_size(map) - 1)
 			return (1);
 		if (check_sides_null(map, i, j) || check_sides_space(map, i, j))
 			return (1);
 	}
+    printf("%d %d not border\n", i, j);
 	return (0);
 }
 
