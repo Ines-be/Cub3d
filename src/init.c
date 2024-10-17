@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:08:52 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/14 16:49:32 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/15 16:04:11 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	init_cub(t_cub *cub)
 	cub->so_text = NULL;
 	cub->ea_text = NULL;
 	cub->we_text = NULL;
+    cub->map = NULL;
 	cub->c_color = -1;
 	cub->f_color = -1;
 }

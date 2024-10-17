@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:13:50 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/14 17:19:17 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/17 12:19:46 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void	parsing(int ac, char **av, t_list **start, t_cub *cub)
 		map_error(-1, "This program takes one argument (the map).", NULL);
 	name_check(av[1]);
 	fd = open(av[1], O_RDONLY);
-	if (fd < 0)
+	if (fd < 0) // perror ?
 		map_error(-1, "Can't open file.", NULL);
 	file_content = get_file(fd);
-	*start = file_content;
+    *start = file_content;
 	if (!file_content || ft_lstsize(file_content) < 8)
 		map_error(fd, "You should have 6 elements and 1 map in your file.",
 			file_content);
@@ -32,6 +32,10 @@ void	parsing(int ac, char **av, t_list **start, t_cub *cub)
 		close(fd);
 	init_cub(cub);
 	get_elems(file_content, cub, *start);
+    skip_elements(&file_content);
+	cub->map = get_map(&file_content);
+	free_list(*start);
+	check_map(cub);
 }
 
 void	name_check(char *str)
@@ -41,8 +45,8 @@ void	name_check(char *str)
 	if (!str || !str[0])
 		map_error(-1, "Invalid name. Must have .cub extension.", NULL);
 	i = ft_strlen(str) - 1;
-	if (str[i] != 'b' || str[i - 1] != 'u' || str[i - 2] != 'c' \
-		|| str[i - 3] != '.')
+	if (str[i] != 'b' || str[i - 1] != 'u' || str[i - 2] != 'c' || str[i
+		- 3] != '.')
 		map_error(-1, "Invalid name. Must have .cub extension.", NULL);
 }
 

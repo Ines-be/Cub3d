@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:34:53 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/16 19:03:38 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/17 17:57:20 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,14 @@
 
 int	main(int ac, char **av)
 {
-	t_list	*start;
-	t_list	*file;
 	t_cub	cub;
+    t_list  *start;
 
 	parsing(ac, av, &start, &cub);
-	file = start;
-	skip_elements(&file);
-	// utiliser file pour le parsing de la map
-	// pour que start soit utilise pour free_list
-	free_list(start); // a la fin du parsing
-	free_cub(&cub); // a la fin du prog
+	printf("c-color = %d et f_color = %d\n", cub.c_color, cub.f_color);
+	printf("cub %s %s %s %s %d %d\n", cub.no_text, cub.so_text, cub.ea_text,
+		cub.we_text, cub.c_color, cub.f_color);
+    print_tab(cub.map);
+    start_mlx(800, 800, &cub);
+	free_cub(&cub);
 }

@@ -3,14 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:30:14 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/16 18:33:45 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/10/17 17:56:06 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+void	exit_map_not_valid(t_cub *cub, int err)
+{
+	printf("Error\n");
+	if (err == 1)
+		printf("Open map detected.\n");
+	if (err == 2)
+		printf("Forbidden character detected.\n");
+	if (err == 3)
+		printf("Multiple players detected.\n");
+	if (err == 4)
+		printf("No player detected.\n");
+	free_cub(cub);
+	exit(EXIT_FAILURE);
+}
 
 void	map_error(int fd, char *msg, t_list *file_content)
 {
