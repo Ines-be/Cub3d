@@ -1,7 +1,7 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
 INCLUDE = cub3d.h
-LIB = -L libft/ -lft mlx/libmlx_Linux.a
+LIB = -L libft/ -lft mlx/libmlx_Linux.a -lm
 MLX = -lXext -lX11
 NAME = cub3d
 # NAME_BONUS = cub3d_bonus

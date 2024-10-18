@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/10/17 16:30:56 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/10/18 18:12:02 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,14 @@
 
 int move_direction_left(t_cub *cub)
 {
-    (void) cub;
-    printf("moving direction left\n");
+    printf("cub vec dir x = %f\n", cub->player.dir.x);  
+    printf("cub vec dir y = %f\n", cub->player.dir.y);
+    cub->player.dir = rotate_vector(cub->player.dir, 1.5708);
+    cub->player.fov_l = rotate_vector(cub->player.fov_l, 1.5708);
+    cub->player.fov_r = rotate_vector(cub->player.fov_r, 1.5708);
+    printf("cub vec dir x = %f\n", cub->player.dir.x);  
+    printf("cub vec dir y = %f\n", cub->player.dir.y);
+    refresh_raycasting(cub);
     return (0);
 }
 

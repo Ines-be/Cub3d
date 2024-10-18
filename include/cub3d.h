@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/17 17:55:48 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/10/18 17:05:16 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 # include "../libft/get_next_line.h"
 # include "../libft/libft.h"
 # include "../mlx/mlx.h"
+# include <math.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <math.h>
 
 # define W 119
 # define A 97
@@ -32,6 +32,7 @@
 # define RIGHT 65363
 # define ESCAPE 65307
 # define ONE_UNIT 64
+# define PI 3.14159265359
 
 typedef struct s_window_mlx
 {
@@ -50,12 +51,19 @@ typedef struct s_mlx_img
 	int				endian;
 }					t_mlx_img;
 
-typedef struct s_player_pos
+typedef struct s_vector
 {
-	float			x;
-	float			y;
-    bool            keypress;
-}					t_player_pos;
+	double			x;
+	double			y;
+}					t_vector;
+
+typedef struct s_player
+{
+	t_vector		pos;
+	t_vector		dir;
+	t_vector		fov_l;
+	t_vector		fov_r;
+}					t_player;
 
 typedef struct s_cub
 {
@@ -67,7 +75,7 @@ typedef struct s_cub
 	int				f_color;
 	char			**map;
 	t_window_mlx	mlx_data;
-	t_player_pos	player_pos;
+	t_player		player;
 }					t_cub;
 
 // Map checking
@@ -86,7 +94,8 @@ void				img_pix_put(t_mlx_img *img, int x, int y, int color);
 
 // Raycasting
 int					start_raycasting(t_window_mlx *data, t_cub *cub);
-int					refresh_raycasting(t_window_mlx *data, t_cub *cub);
+int					refresh_raycasting(t_cub *cub);
+t_vector			rotate_vector(t_vector vector, double angle);
 
 // Handle keyboard inputs
 int					handle_keyboard_inputs(int key, t_cub *cub);
@@ -142,16 +151,18 @@ bool				is_empty(char *str);
 bool				is_elem(char *str);
 
 // utils2
-bool		is_number(char c);
-bool		only_numbers(char *str);
-int			create_rgb(int r, int g, int b);
-int			pos_atoi(char *str);
-void		skip_elements(t_list **file_content);
+bool				is_number(char c);
+bool				only_numbers(char *str);
+int					create_rgb(int r, int g, int b);
+int					pos_atoi(char *str);
+void				skip_elements(t_list **file_content);
 
 // errors
-void		map_error(int fd, char *msg, t_list *file_content);
-void		texture_error(char **tab, t_list *start, t_cub *cub, char *msg);
-void		color_error(char **tab, t_list *start, t_cub *cub, char *color);
+void				map_error(int fd, char *msg, t_list *file_content);
+void				texture_error(char **tab, t_list *start, t_cub *cub,
+						char *msg);
+void				color_error(char **tab, t_list *start, t_cub *cub,
+						char *color);
 
 // ft_split
 char				**ft_split(const char *s, char c);
