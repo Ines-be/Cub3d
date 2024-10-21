@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/18 17:05:16 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/10/21 16:59:42 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,12 @@ typedef struct s_mlx_img
 	int				endian;
 }					t_mlx_img;
 
+typedef struct s_position
+{
+	double			x;
+	double			y;
+}					t_position;
+
 typedef struct s_vector
 {
 	double			x;
@@ -59,7 +65,7 @@ typedef struct s_vector
 
 typedef struct s_player
 {
-	t_vector		pos;
+	t_position		pos;
 	t_vector		dir;
 	t_vector		fov_l;
 	t_vector		fov_r;
@@ -95,7 +101,8 @@ void				img_pix_put(t_mlx_img *img, int x, int y, int color);
 // Raycasting
 int					start_raycasting(t_window_mlx *data, t_cub *cub);
 int					refresh_raycasting(t_cub *cub);
-t_vector			rotate_vector(t_vector vector, double angle);
+t_vector			rotate_vector(t_vector vec, double angle);
+t_position			get_pos_from_vector(t_position init_pos, t_vector vector);
 
 // Handle keyboard inputs
 int					handle_keyboard_inputs(int key, t_cub *cub);
