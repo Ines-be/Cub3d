@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 13:44:36 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/10/21 17:34:38 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/10/22 17:22:16 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 int move_character_up(t_cub *cub)
 {
-    cub->player.pos.y -= 0.1;
+    cub->player.pos.y += 0.1;
     refresh_raycasting(cub);
     return (0);
 }
 
 int move_character_down(t_cub *cub)
 {
-    cub->player.pos.y += 0.1;
+    cub->player.pos.y -= 0.1;
     refresh_raycasting(cub);
     return (0);
 }
