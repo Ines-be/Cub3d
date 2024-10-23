@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/10/22 18:34:05 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/10/23 17:43:30 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,8 @@ void	find_player_init_pos(t_cub *cub)
 		{
 			if (is_player_direction(cub->map[i][j]))
 			{
-				cub->player.pos.x = j + 0.5;
-				cub->player.pos.y = get_arr_size(cub->map) - i - 0.5;
-				printf("player x = %f\n", cub->player.pos.x);
-				printf("player y = %f\n", cub->player.pos.y);
+				cub->player.pos.x = j * 10 + 5;
+				cub->player.pos.y = i * 10 + 5;
 				return ;
 			}
 		}
@@ -71,8 +69,12 @@ t_position	coordinates_to_px(double x, double y, int arr_size)
 {
 	t_position	player_pos;
 
-	player_pos.x = ONE_UNIT * x + 10;
-	player_pos.y = ONE_UNIT * (arr_size - y) + 10;
+    (void) arr_size;
+    
+    x /= 10;
+    y /= 10;
+	player_pos.x = (ONE_UNIT * x + 10);
+	player_pos.y = (ONE_UNIT * y + 10);
 	return (player_pos);
 }
 
@@ -80,8 +82,8 @@ t_position	get_pos_from_vector(t_position init_pos, t_vector vector)
 {
 	t_position	new_pos;
 
-	new_pos.x = init_pos.x + vector.x;
-	new_pos.y = init_pos.y + vector.y;
+	new_pos.x = init_pos.x - vector.x;
+	new_pos.y = init_pos.y - vector.y;
 	return (new_pos);
 }
 
@@ -109,58 +111,143 @@ int	draw_player(t_mlx_img *img, t_cub *cub)
 	fov_l = get_pos_from_vector(cub->player.pos, cub->player.fov_l);
 	fov_r = get_pos_from_vector(cub->player.pos, cub->player.fov_r);
 	dir = get_pos_from_vector(cub->player.pos, cub->player.dir);
-	printf("draw player pos = %f %f\n", cub->player.pos.x, cub->player.pos.y);
 	draw(img, coordinates_to_px(cub->player.pos.x, cub->player.pos.y,
 			arr_size));
-	printf("draw player pos = %f %f\n", cub->player.pos.x, cub->player.pos.y);
 	draw(img, coordinates_to_px(fov_l.x, fov_l.y, arr_size));
 	draw(img, coordinates_to_px(fov_r.x, fov_r.y, arr_size));
 	draw(img, coordinates_to_px(dir.x, dir.y, arr_size));
 	return (0);
 }
 
-int	draw_ray(t_mlx_img *img, t_position start, t_position end, int arr_size)
+void	ft_swap(double *a, double *b)
+{
+	int	tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+int	draw_ray_horizontal(t_mlx_img *img, t_position start, t_position end, int arr_size)
 {
 	t_position	px_start;
 	t_position	px_end;
-	int			x_term;
-	int			y_term;
-	int			error_term;
+	int			delta_x;
+	int			delta_y;
+	int			decision_term;
+	int			dir;
+	int			y;
+	int			i;
 
 	px_start = coordinates_to_px(start.x, start.y, arr_size);
 	px_end = coordinates_to_px(end.x, end.y, arr_size);
-	x_term = px_end.x - px_start.x;
-	y_term = px_end.y - px_start.y;
-	error_term = 2 * y_term - x_term;
-	printf(" %f %f %f %f %d %d %d\n", px_start.x, px_start.y, px_end.x,
-		px_end.y, x_term, y_term, error_term);
-    while (px_start.x != px_end.x && px_start.y != px_end.y)
-    {
-        img_pix_put(img, px_start.x, px_start.y, 0x008000);
-        if (px_start.x > px_end.x)
-            px_start.x++;
-        else
-            px_start.x--;
-        if (error_term > 0)
-        {
-            px_start.y++;
-            error_term = error_term + (2 * y_term) - (2 * x_term);
-        }
-        else
-            error_term = error_term * (2 * y_term);
-    }
+	if (px_start.x > px_end.x)
+	{
+		ft_swap(&px_start.x, &px_end.x);
+		ft_swap(&px_start.y, &px_end.y);
+	}
+	delta_x = px_end.x - px_start.x;
+	delta_y = px_end.y - px_start.y;
+	if (delta_y > 0)
+		dir = 1;
+	else
+		dir = -1;
+	delta_y *= dir;
+	i = 0;
+	y = px_start.y;
+	decision_term = 2 * delta_y - delta_x;
+	while (i < delta_x + 1)
+	{
+		img_pix_put(img, px_start.x + i, y, 0x008000);
+		if (decision_term >= 0)
+		{
+			y += dir;
+			decision_term -= 2 * delta_x;
+		}
+		else
+			decision_term += 2 * delta_y;
+        i++;
+	}
+	// need to check if dx is negativee ?
 	return (0);
+}
+
+int	draw_ray_vertical(t_mlx_img *img, t_position start, t_position end, int arr_size)
+{
+	t_position	px_start;
+	t_position	px_end;
+	int			delta_x;
+	int			delta_y;
+	int			decision_term;
+	int			dir;
+	int			x;
+	int			i;
+
+	px_start = coordinates_to_px(start.x, start.y, arr_size);
+	px_end = coordinates_to_px(end.x, end.y, arr_size);
+	if (px_start.y > px_end.y)
+	{
+		ft_swap(&px_start.x, &px_end.x);
+		ft_swap(&px_start.y, &px_end.y);
+	}
+	delta_x = px_end.x - px_start.x;
+	delta_y = px_end.y - px_start.y;
+	if (delta_x > 0)
+		dir = 1;
+	else
+		dir = -1;
+	delta_x *= dir;
+	i = 0;
+	x = px_start.x;
+	decision_term = 2 * delta_x - delta_y;
+	while (i < delta_y + 1)
+	{
+		img_pix_put(img, x, px_start.y + i, 0x008000);
+		if (decision_term >= 0)
+		{
+			x += dir;
+			decision_term -= 2 * delta_y;
+		}
+		else
+			decision_term += 2 * delta_x;
+        i++;
+	}
+	// need to check if dx is negativee ?
+	return (0);
+}
+
+int draw_ray(t_mlx_img *img, t_position start, t_position end, int arr_size)
+{
+    if (abs((int)end.x > (int)start.x) > abs((int)end.y - (int)start.y))
+        draw_ray_horizontal(img, start, end, arr_size);
+    else
+        draw_ray_vertical(img, start, end, arr_size);
+    return (0);
 }
 
 int	init_camera_vectors(t_cub *cub)
 {
 	cub->player.dir.x = 0;
-	cub->player.dir.y = 0.5;
-	cub->player.fov_l.x = -0.5;
-	cub->player.fov_l.y = 0.5;
-	cub->player.fov_r.x = 0.5;
-	cub->player.fov_r.y = 0.5;
+	cub->player.dir.y = 20;
+	cub->player.fov_l.x = -5;
+	cub->player.fov_l.y = 20;
+	cub->player.fov_r.x = 5;
+	cub->player.fov_r.y = 20;
 	return (0);
+}
+
+int shoot_rays(t_cub *cub)
+{
+    t_vector *rays;
+    t_position fov_l;
+    t_position fov_r;
+
+    rays = malloc(sizeof(t_vector) * 10);
+    if (!rays)
+        return (error_exit(NULL));
+    fov_l = get_pos_from_vector(cub->player.pos, cub->player.fov_l);
+    fov_r = get_pos_from_vector(cub->player.pos, cub->player.fov_r);
+    return (0);
 }
 
 int	start_raycasting(t_window_mlx *data, t_cub *cub)
@@ -171,8 +258,6 @@ int	start_raycasting(t_window_mlx *data, t_cub *cub)
 	if (!img)
 		return (error_exit(NULL), -1);
 	find_player_init_pos(cub);
-	printf("player init position = %f %f\n", cub->player.pos.x,
-		cub->player.pos.y);
 	draw_map(img, cub->map);
 	init_camera_vectors(cub);
 	draw_player(img, cub);
@@ -184,18 +269,15 @@ int	start_raycasting(t_window_mlx *data, t_cub *cub)
 int	refresh_raycasting(t_cub *cub)
 {
 	t_mlx_img	*img;
-	t_position	end;
 
 	img = init_img(&cub->mlx_data);
 	if (!img)
 		return (error_exit(NULL), -1);
 	draw_map(img, cub->map);
 	draw_player(img, cub);
-	end.x = cub->player.pos.x - 1;
-	end.y = cub->player.pos.y - 1;
-	printf("player pos = x %f y %f\n", cub->player.pos.x, cub->player.pos.y);
-	printf("cam l = %f %f\n", cub->player.fov_l.x, cub->player.fov_l.y);
-	draw_ray(img, cub->player.pos, end, get_arr_size(cub->map));
+	draw_ray(img, cub->player.pos, get_pos_from_vector(cub->player.pos, cub->player.fov_l), get_arr_size(cub->map));
+	draw_ray(img, cub->player.pos, get_pos_from_vector(cub->player.pos, cub->player.fov_r), get_arr_size(cub->map));
+	draw_ray(img, cub->player.pos, get_pos_from_vector(cub->player.pos, cub->player.dir), get_arr_size(cub->map));
 	mlx_put_image_to_window(cub->mlx_data.mlx_ptr, cub->mlx_data.win_ptr,
 		img->img_ptr, 0, 0);
 	mlx_destroy_image(cub->mlx_data.mlx_ptr, img->img_ptr);

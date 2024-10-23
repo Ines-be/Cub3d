@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/21 16:59:42 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/10/23 16:41:35 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ typedef struct s_mlx_img
 
 typedef struct s_position
 {
-	double			x;
-	double			y;
+	double				x;
+	double				y;
 }					t_position;
 
 typedef struct s_vector
